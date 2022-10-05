@@ -1,5 +1,5 @@
 import plotly.graph_objects as go
-from app.controller.get_data import Diseases
+from app.controller.diseases import Diseases
 
 def diseases(year_min, year_max, diseases):
     fig = go.Figure()
