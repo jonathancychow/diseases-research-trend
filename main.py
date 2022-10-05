@@ -12,12 +12,14 @@ app.layout = main_layout()
 @app.callback(
     Output('countries-graph', 'figure'),
     [
-        # Input('unit-conversion-borough', 'value'),
-     Input('plot-countries-case', 'value')
+        Input('year-min', 'value'),
+        Input('year-max', 'value')
      ])
-def plot_countries(unit):
-    countries = None
-    return diseases(countries, unit)
+def plot_countries(year_min, year_max):
+
+    print(f"min: {year_min}, max:{year_max}")
+    print(type(year_min))
+    return diseases(year_min, year_max)
 
 
 if __name__ == '__main__':
