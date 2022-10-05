@@ -1,10 +1,8 @@
 import plotly.graph_objects as go
 from app.controller.get_data import Diseases
 
-def diseases(year_min, year_max):
+def diseases(year_min, year_max, diseases):
     fig = go.Figure()
-    year = 2019
-    diseases = 'obstetrics'
     d = Diseases()
     x = list(range(year_min, year_max + 1, 1))
     y = []
