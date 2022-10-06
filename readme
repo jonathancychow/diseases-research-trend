@@ -1,4 +1,0 @@
-
-conda create --name lingu python=3.7
-conda activate lingu
-pip install -r requirements.txt

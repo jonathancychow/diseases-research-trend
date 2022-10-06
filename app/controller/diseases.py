@@ -28,6 +28,16 @@ class Diseases(EntrezDatabases):
     def payload_string(self, payload)->str:
         return urllib.parse.urlencode(payload, safe=':+')
     
+    def parse_xml(self, xml_string):
+        try:
+            xml_root = ET.fromstring(xml_string, parser=self._parser)
+        except ParseError:
+            xml_root = ET.fromstring(xml_string)
+        return xml_root
+    
+    def get_response_text(self, r):
+        return r.text
+
     def get_entries_by_year(self, year, diseases, area, date_field='dp')-> int:
 
         baseURL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi'
@@ -36,15 +46,18 @@ class Diseases(EntrezDatabases):
             EUtilityField.TERM.value: f"{diseases}+AND+{area}+AND+{year}[{date_field}]"
         }
 
-        r = requests.get(
+        response = requests.get(
                 baseURL, 
                 params = self.payload_string(payload)
             )
 
-        try:
-            xml_root = ET.fromstring(r.text, parser=self._parser)
-        except ParseError:
-            xml_root = ET.fromstring(r.text)
+        response_text = self.get_response_text(response)
+
+        # try:
+        #     xml_root = ET.fromstring(r.text, parser=self._parser)
+        # except ParseError:
+        #     xml_root = ET.fromstring(r.text)
+        xml_root = self.parse_xml(response_text)
 
         entries = [int(result.find(EQueryField.COUNT.value).text) for result in xml_root.find(EQueryField.RESULT.value).findall(EQueryField.ITEM.value) \
             if result.find(EQueryField.COUNT.value).text != EQueryField.ERROR.value]
