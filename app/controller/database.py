@@ -1,5 +1,6 @@
 import requests
 from app.controller.ncbi import NCBI
+from app.controller.enum import EInfoField
 
 class EntrezDatabases(NCBI):
 
@@ -7,7 +8,7 @@ class EntrezDatabases(NCBI):
         baseURL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi'
 
         payload = {
-            'retmode': 'json',
+            EInfoField.RETMODE.value: 'json',
         }
 
         r = requests.get(
@@ -15,16 +16,7 @@ class EntrezDatabases(NCBI):
             params = payload
             )
 
-        # data = r.json()
         data = self.get_response_json(r)
-        
-        return data['einforesult']['dblist'] if 'einforesult' in data and 'dblist' in data['einforesult'] else []
 
-if __name__ == '__main__':
-    year = 2019
-    # diseases = 'obstetrics'
-    diseases = 'cancer'
-
-    d = EntrezDatabases()
-    # for year in [2017,2018,2019]:
-    print(d.get_db_list())
+        return data[EInfoField.RESULT.value][EInfoField.DB_LIST.value] \
+            if EInfoField.RESULT.value in data and EInfoField.DB_LIST.value in data[EInfoField.RESULT.value] else []

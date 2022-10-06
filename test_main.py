@@ -5,6 +5,8 @@ import pytest
 from app.model.entry import Entry
 from app.controller.database import EntrezDatabases
 from app.controller.diseases import Diseases
+from app.controller.enum import EInfoField
+
 from unittest.mock import patch
 
 @pytest.fixture
@@ -31,7 +33,7 @@ def test_get_database_valid_einforesult(setup_database):
         db_list = setup_database.get_db_list()
 
     assert 'pubmed' in db_list
-    assert mock_einforesult_valid()["einforesult"]["dblist"] == db_list
+    assert mock_einforesult_valid()[EInfoField.RESULT.value][EInfoField.DB_LIST.value] == db_list
 
 def test_get_database_invalid_einforesult(setup_database):
 
@@ -57,8 +59,8 @@ def test_get_database_list(setup_database):
 
 def test_get_entries_by_year(setup_diseases):
     year, diseases, area = 2019, 'obstetrics', 'UK'
-    d = setup_diseases.get_entries_by_year(year, diseases, area)
-    assert d == 5856
+    entry = setup_diseases.get_entries_by_year(year, diseases, area)
+    assert entry == 5856
 
 def test_parse_xml_count():
 
@@ -67,9 +69,9 @@ def test_parse_xml_count():
             data = file.read()
         return data
 
-    d = Diseases()
+    diseases = Diseases()
 
     with patch("app.controller.diseases.Diseases.get_response_text", read_response_xml):
-        val = d.get_entries_by_year(2010,'Asthma','UK')
+        entry = diseases.get_entries_by_year(2010,'Asthma','UK')
   
-    assert val == 828052
+    assert entry == 828052
