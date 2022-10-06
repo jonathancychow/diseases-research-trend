@@ -1,8 +1,8 @@
 import requests
+from app.controller.ncbi import NCBI
 
-class EntrezDatabases:
+class EntrezDatabases(NCBI):
 
-    
     def get_db_list(self)-> list:
         baseURL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi'
 
@@ -15,7 +15,9 @@ class EntrezDatabases:
             params = payload
             )
 
-        data = r.json()
+        # data = r.json()
+        data = self.get_response_json(r)
+        
         return data['einforesult']['dblist'] if 'einforesult' in data and 'dblist' in data['einforesult'] else []
 
 if __name__ == '__main__':

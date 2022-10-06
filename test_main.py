@@ -1,13 +1,10 @@
 
+import json
 import pytest
-import requests
-import app.controller.diseases
 
 from app.model.entry import Entry
 from app.controller.database import EntrezDatabases
 from app.controller.diseases import Diseases
-
-from unittest import mock
 from unittest.mock import patch
 
 @pytest.fixture
@@ -22,6 +19,34 @@ def test_entry():
     entry = Entry()
     assert isinstance(entry._entry, list)
     assert isinstance(entry._year, list)
+
+def test_get_database_valid_einforesult(setup_database):
+
+    def mock_einforesult_valid(*args):
+        with open('./test/einfo_response.json', 'r') as file:
+            data = json.load(file)
+        return data
+
+    with patch("app.controller.database.EntrezDatabases.get_response_json", mock_einforesult_valid):
+        db_list = setup_database.get_db_list()
+
+    assert 'pubmed' in db_list
+    assert mock_einforesult_valid()["einforesult"]["dblist"] == db_list
+
+def test_get_database_invalid_einforesult(setup_database):
+
+    def mock_einforesult_invalid(*args):
+        return {
+                "header": {
+                    "type": "einfo",
+                    "version": "0.3"
+                }}
+
+    with patch("app.controller.database.EntrezDatabases.get_response_json", mock_einforesult_invalid):
+        db_list = setup_database.get_db_list()
+    
+    assert isinstance(db_list, list)
+    assert db_list == []
 
 def test_get_database_list(setup_database):
     db_list = setup_database.get_db_list()
@@ -48,5 +73,3 @@ def test_parse_xml_count():
         val = d.get_entries_by_year(2010,'Asthma','UK')
   
     assert val == 828052
-
-

@@ -1,8 +1,7 @@
 
-import ast
 import requests
-import urllib.parse
 import xml.etree.ElementTree as ET
+
 from enum import Enum
 # from database import EntrezDatabases
 from app.controller.database import EntrezDatabases
@@ -25,8 +24,8 @@ class Diseases(EntrezDatabases):
         self._db_list = self.get_db_list()
         self._parser = ET.XMLParser(encoding="utf-8")
 
-    def payload_string(self, payload)->str:
-        return urllib.parse.urlencode(payload, safe=':+')
+    # def payload_string(self, payload)->str:
+    #     return urllib.parse.urlencode(payload, safe=':+')
     
     def parse_xml(self, xml_string):
         try:
@@ -35,8 +34,8 @@ class Diseases(EntrezDatabases):
             xml_root = ET.fromstring(xml_string)
         return xml_root
     
-    def get_response_text(self, r):
-        return r.text
+    # def get_response_text(self, r):
+    #     return r.text
 
     def get_entries_by_year(self, year, diseases, area, date_field='dp')-> int:
 
