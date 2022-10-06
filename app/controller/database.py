@@ -16,7 +16,7 @@ class EntrezDatabases:
             )
 
         data = r.json()
-        return data['einforesult']['dblist'] 
+        return data['einforesult']['dblist'] if 'einforesult' in data and 'dblist' in data['einforesult'] else []
 
 if __name__ == '__main__':
     year = 2019

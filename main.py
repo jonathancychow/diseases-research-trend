@@ -16,7 +16,7 @@ app.layout = main_layout()
         Input('year-max', 'value'),
         Input('diseases-type', 'value')
      ])
-def plot_countries(year_min, year_max, diseases_type):
+def plot_entries(year_min, year_max, diseases_type):
 
     print(f"min: {year_min}, max:{year_max}, dis:{diseases_type}")
     print(type(diseases_type))
