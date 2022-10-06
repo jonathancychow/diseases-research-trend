@@ -1,3 +1,4 @@
+import datetime 
 import plotly.graph_objects as go
 from app.controller.diseases import Diseases
 from app.model.entry import Entry
@@ -6,6 +7,9 @@ def diseases(year_min, year_max, diseases):
     fig = go.Figure()
     d = Diseases()
     entry = Entry()
+    
+    start_time = datetime.datetime.now()
+
     # x = list(range(year_min, year_max + 1, 1))
     entry._year = list(range(year_min, year_max + 1, 1))
     # y = []
@@ -23,4 +27,7 @@ def diseases(year_min, year_max, diseases):
             name = 'Diseases'
             )
         )
-    return [fig]          
+    
+    time_taken = datetime.datetime.now() - start_time  
+
+    return fig, time_taken.seconds

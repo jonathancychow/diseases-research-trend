@@ -9,13 +9,13 @@ def main_layout():
                 html.H1(children='Diseases Research Articles Trend',
                         style={
                             'textAlign': 'center',
-                            # 'color': dash_colors['black'],
+                            'color': dash_colors['black'],
                         },
                         )
             ),
             html.Div([
                 dcc.Graph(id='entries-graph'),
-                dcc.Input(id='year-min', type='number', value=2015, min=1900, max=2022, step=1),
+                dcc.Input(id='year-min', type='number', value=2016, min=1900, max=2022, step=1),
                 dcc.Input(id='year-max', type='number', value=2018, min=1900, max=2022, step=1),
             ],
                 style={
@@ -29,7 +29,6 @@ def main_layout():
             html.Div([
                 dcc.Dropdown(
                     id='diseases-type',
-                    # multi=True,
                     options=[{'label': i, 'value': i}
                              for i in ['obstetrics','cancer']],
                     value='obstetrics',
@@ -47,7 +46,6 @@ def main_layout():
                     'width': '100%',
                     'float': 'center',
                     'display': 'inline-block'}
-
             ),
             html.Button('Submit', id='submit-button', n_clicks=0, style={
                     'textAlign': 'center',
@@ -55,6 +53,9 @@ def main_layout():
                     'width': '100%',
                     'float': 'center',
                     'display': 'inline-block'}),
+            html.Div([
+                dcc.Graph(id='time-taken-graph')
+                ]),
         ]
     )
     return main_layout
