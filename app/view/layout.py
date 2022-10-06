@@ -14,9 +14,9 @@ def main_layout():
                         )
             ),
             html.Div([
-                dcc.Graph(id='countries-graph'),
-                dcc.Input(id='year-min', type='number', value=2018, min=1900, max=2022, step=1),
-                dcc.Input(id='year-max', type='number', value=2020, min=1900, max=2022, step=1),
+                dcc.Graph(id='entries-graph'),
+                dcc.Input(id='year-min', type='number', value=2015, min=1900, max=2022, step=1),
+                dcc.Input(id='year-max', type='number', value=2018, min=1900, max=2022, step=1),
             ],
                 style={
                     'textAlign': 'center',
@@ -39,7 +39,7 @@ def main_layout():
                         'display': 'inline-block',
                         'verticalAlign': "middle",
                                 },
-                            )
+                            ),
                         ],
                 style={
                     'textAlign': 'center',
@@ -49,6 +49,12 @@ def main_layout():
                     'display': 'inline-block'}
 
             ),
+            html.Button('Submit', id='submit-button', n_clicks=0, style={
+                    'textAlign': 'center',
+                    'color': dash_colors['black'],
+                    'width': '100%',
+                    'float': 'center',
+                    'display': 'inline-block'}),
         ]
     )
     return main_layout

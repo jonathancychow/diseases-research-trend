@@ -1,4 +1,4 @@
-# from requests import get
+
 import ast
 import requests
 import urllib.parse
@@ -6,9 +6,11 @@ import xml.etree.ElementTree as ET
 from enum import Enum
 # from database import EntrezDatabases
 from app.controller.database import EntrezDatabases
+from xml.etree.ElementTree import ParseError
 
 class EUtilityField(Enum):
     TERM = 'term'
+
 class EQueryField(Enum):
     COUNT = 'Count'
     RESULT = 'eGQueryResult'
@@ -39,20 +41,13 @@ class Diseases(EntrezDatabases):
                 params = self.payload_string(payload)
             )
 
-        # parser = ET.XMLParser(encoding="utf-8")
-        xml_root = ET.fromstring(r.text, parser=self._parser)
+        try:
+            xml_root = ET.fromstring(r.text, parser=self._parser)
+        except ParseError:
+            xml_root = ET.fromstring(r.text)
+
         entries = [int(result.find(EQueryField.COUNT.value).text) for result in xml_root.find(EQueryField.RESULT.value).findall(EQueryField.ITEM.value) \
             if result.find(EQueryField.COUNT.value).text != EQueryField.ERROR.value]
-
-        # entry_number =[]
-        # xml_root = ET.fromstring(r.text)
-        # # equery_results = xml_root.findall('eGQueryResult')
-        # for result in xml_root.find('eGQueryResult').findall('ResultItem'):
-        #     # result_item = result.find('ResultItem')
-        #     count = result.find('Count').text
-        #     entry_number.append(count)
-
-        # data = r.json()
 
         return sum(entries)
 

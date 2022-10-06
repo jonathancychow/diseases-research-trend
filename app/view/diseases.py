@@ -23,4 +23,4 @@ def diseases(year_min, year_max, diseases):
             name = 'Diseases'
             )
         )
-    return fig          
+    return [fig]          
