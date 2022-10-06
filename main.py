@@ -21,14 +21,13 @@ app.layout = main_layout()
     [
         State('year-min', 'value'),
         State('year-max', 'value'),
-        State('diseases-type', 'value')
+        State('diseases-type', 'value'),
+        State('diseases-area', 'value')
      ])
-def plot_entries(timestamp, year_min, year_max, diseases_type):
+def plot_entries(timestamp, year_min, year_max, diseases_type, diseases_area):
 
-    print(f"min: {year_min}, max:{year_max}, dis:{diseases_type}")
-    print(type(diseases_type))
-    fig, time_taken = diseases(year_min, year_max, diseases_type)
-    print(f"time taken: {time_taken}")
+    print(f"min: {year_min}, max:{year_max}, dis:{diseases_type}, area:{diseases_area}")
+    fig, time_taken = diseases(year_min, year_max, diseases_type, diseases_area)
     return fig, time(time_taken)
 
 

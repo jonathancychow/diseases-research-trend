@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 from app.controller.diseases import Diseases
 from app.model.entry import Entry
 
-def diseases(year_min, year_max, diseases):
+def diseases(year_min, year_max, diseases, area):
     fig = go.Figure()
     d = Diseases()
     entry = Entry()
@@ -17,7 +17,7 @@ def diseases(year_min, year_max, diseases):
     for year in entry._year:
         # y.append(d.get_data(year, diseases))
         # y.append(d.get_entries_by_year(year, diseases))
-        entry._entry.append(d.get_entries_by_year(year, diseases))
+        entry._entry.append(d.get_entries_by_year(year, diseases, area))
 
     fig.add_trace(
         go.Scatter(

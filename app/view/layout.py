@@ -6,7 +6,7 @@ def main_layout():
     main_layout = html.Div(
         children=[
             html.Div(
-                html.H1(children='Diseases Research Articles Trend',
+                html.H1(children='Diseases Research Trend',
                         style={
                             'textAlign': 'center',
                             'color': dash_colors['black'],
@@ -27,18 +27,42 @@ def main_layout():
 
             ),
             html.Div([
-                dcc.Dropdown(
-                    id='diseases-type',
-                    options=[{'label': i, 'value': i}
-                             for i in ['obstetrics','cancer']],
-                    value='obstetrics',
-                    style={
-                        'fontSize': 15,
-                        'width': '100%',
-                        'display': 'inline-block',
-                        'verticalAlign': "middle",
-                                },
-                            ),
+                        html.H6(children='Diseases Type',
+                        style={
+                            'textAlign': 'center',
+                            'color': dash_colors['black'],
+                        },
+                        ),
+                        dcc.Dropdown(
+                            id='diseases-type',
+                            options=[{'label': i, 'value': i}
+                                    for i in ['Obstetrics','Asthma','Diabetes','Cancer']],
+                            value='Obstetrics',
+                            style={
+                                'fontSize': 15,
+                                'width': '50%',
+                                'display': 'inline-block',
+                                'verticalAlign': "middle",
+                                        },
+                                    ),
+                        html.H6(children='Area',
+                        style={
+                            'textAlign': 'center',
+                            'color': dash_colors['black'],
+                        },
+                        ),
+                        dcc.Dropdown(
+                            id='diseases-area',
+                            options=[{'label': i, 'value': i}
+                                    for i in ['UK','USA','France','China']],
+                            value='UK',
+                            style={
+                                'fontSize': 15,
+                                'width': '50%',
+                                'display': 'inline-block',
+                                'verticalAlign': "middle",
+                                        },
+                                    ),
                         ],
                 style={
                     'textAlign': 'center',

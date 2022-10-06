@@ -28,12 +28,12 @@ class Diseases(EntrezDatabases):
     def payload_string(self, payload)->str:
         return urllib.parse.urlencode(payload, safe=':+')
     
-    def get_entries_by_year(self, year, diseases, date_field='dp')-> int:
+    def get_entries_by_year(self, year, diseases, area, date_field='dp')-> int:
 
         baseURL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi'
         
         payload = {
-            EUtilityField.TERM.value: f"{diseases}+AND+{year}[{date_field}]"
+            EUtilityField.TERM.value: f"{diseases}+AND+{area}+AND+{year}[{date_field}]"
         }
 
         r = requests.get(
@@ -81,7 +81,6 @@ if __name__ == '__main__':
     year = 2019
     # diseases = 'obstetrics'
     diseases = 'cancer'
-
     import datetime 
     now = datetime.datetime.now()
 
