@@ -27,6 +27,8 @@ The router timeout issue is still an outstanding issue I'm trying to resolve but
 ## Starting the server
     python main.py
 
+The app will then be available on localhost:8050
+
 ## Testing
 ### Run Test
     coverage run -m pytest

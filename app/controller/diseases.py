@@ -13,14 +13,14 @@ class Diseases(EntrezDatabases):
         self._db_list = self.get_db_list()
         self._parser = ET.XMLParser(encoding="utf-8")
 
-    def parse_xml(self, xml_string):
+    def parse_xml(self, xml_string:str):
         try:
             xml_root = ET.fromstring(xml_string, parser=self._parser)
         except ParseError:
             xml_root = ET.fromstring(xml_string)
         return xml_root
 
-    def get_entries_by_year(self, year, diseases, area, date_field='dp')-> int:
+    def get_entries_by_year(self, year:int, diseases:str, area:str, date_field='dp')-> int:
 
         baseURL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi'
         
@@ -33,7 +33,7 @@ class Diseases(EntrezDatabases):
                 params = self.payload_string(payload)
             )
 
-        response_text = self.get_response_text(response)
+        response_text:str = self.get_response_text(response)
         xml_root = self.parse_xml(response_text)
 
         entries = [int(result.find(EQueryField.COUNT.value).text) for result in xml_root.find(EQueryField.RESULT.value).findall(EQueryField.ITEM.value) \
@@ -41,7 +41,7 @@ class Diseases(EntrezDatabases):
 
         return sum(entries)
 
-    def get_entries_esearch(self, year, diseases)-> int:
+    def get_entries_esearch(self, year:int, diseases:str)-> int:
 
         baseURL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
 
@@ -60,7 +60,7 @@ class Diseases(EntrezDatabases):
                     baseURL, 
                     params = self.payload_string(payload)
                     )
-                data = r.json()
+                data:dict = r.json()
                 entry_number.append(int(data[ESearchField.RESULT.value][ESearchField.COUNT.value]))
 
         return sum(entry_number)

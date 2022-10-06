@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 from app.controller.diseases import Diseases
 from app.model.entry import Entry
 
-def diseases(year_min, year_max, diseases, area):
+def diseases(year_min:int, year_max:int, diseases:str, area:str):
     print(f"min: {year_min}, max:{year_max}, diseases:{diseases}, area:{area}")
 
     fig = go.Figure()
