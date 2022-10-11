@@ -11,14 +11,14 @@ def diseases(year_min:int, year_max:int, diseases:str, area:str):
     entry = Entry()
     
     start_time = datetime.datetime.now()
-    entry._year = list(range(year_min, year_max + 1, 1))
+    entry.year = list(range(year_min, year_max + 1, 1))
    
-    for year in entry._year:
-        entry._entry.append(d.get_entries_by_year(year, diseases, area))
+    for year in entry.year:
+        entry.entry.append(d.get_entries_by_year(year, diseases, area))
 
     fig.add_trace(
         go.Scatter(
-            x = entry._year, 
+            x = entry.year, 
             y = entry._entry,
             mode = 'lines',
             name = 'Diseases'

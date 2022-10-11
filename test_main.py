@@ -19,8 +19,8 @@ def setup_diseases():
 
 def test_entry():
     entry = Entry()
-    assert isinstance(entry._entry, list)
-    assert isinstance(entry._year, list)
+    assert isinstance(entry.entry, list)
+    assert isinstance(entry.year, list)
 
 def test_get_database_valid_einforesult(setup_database):
 
