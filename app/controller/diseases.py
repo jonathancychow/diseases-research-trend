@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 
 from app.controller.enum import EUtilityField, EQueryField, ESearchField
 from app.controller.database import EntrezDatabases
+from ratelimit import limits, sleep_and_retry
 from xml.etree.ElementTree import ParseError
 
 class XmlParsingException(Exception):
@@ -17,26 +18,29 @@ class Diseases(EntrezDatabases):
 
     def parse_xml(self, xml_string:str):
         try:
-            # xml_root = ET.fromstring(xml_string, parser=self._parser)
             if '"error":"API rate limit exceeded"' in xml_string:
                 raise XmlParsingException("rate limit exceeded")
             xml_root = ET.fromstring(xml_string)
         except ParseError:
-            xml_root = ET.fromstring(xml_string)
+            xml_root = ET.fromstring(xml_string, parser=self._parser)
         return xml_root
 
-    def get_entries_by_year(self, year:int, diseases:str, area:str, date_field='dp')-> int:
-
+    @sleep_and_retry
+    @limits(calls=1, period=1)
+    def make_request(self, payload:str):
         baseURL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi'
+        return requests.get(
+                baseURL, 
+                params = self.payload_string(payload)
+            )
+
+    def get_entries_by_year(self, year:int, diseases:str, area:str, date_field='dp')-> int:
         
         payload = {
             EUtilityField.TERM.value: f"{diseases}+AND+{area}+AND+{year}[{date_field}]"
         }
 
-        response = requests.get(
-                baseURL, 
-                params = self.payload_string(payload)
-            )
+        response = self.make_request(payload)
 
         response_text:str = self.get_response_text(response)
         xml_root = self.parse_xml(response_text)
@@ -61,10 +65,7 @@ class Diseases(EntrezDatabases):
                     ESearchField.RETMAX.value: 1
                 }
 
-                r = requests.get(
-                    baseURL, 
-                    params = self.payload_string(payload)
-                    )
+                r = self.make_request(payload)
                 data:dict = r.json()
                 entry_number.append(int(data[ESearchField.RESULT.value][ESearchField.COUNT.value]))
 

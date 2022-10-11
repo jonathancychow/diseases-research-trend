@@ -14,12 +14,8 @@ def diseases(year_min:int, year_max:int, diseases:str, area:str):
     start_time = datetime.datetime.now()
     entry.year = list(range(year_min, year_max + 1, 1))
    
-    # from concurrent.futures import ThreadPoolExecutor
-    # pool = ThreadPoolExecutor(workers=6)
-
     # for year in entry.year:
     #     entry.entry.append(d.get_entries_by_year(year, diseases, area))
-
    
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
         future_response = {executor.submit(d.get_entries_by_year, year, diseases, area): year for year in entry.year}
@@ -29,15 +25,8 @@ def diseases(year_min:int, year_max:int, diseases:str, area:str):
                 entry.entry.append(future.result())
             except Exception as exc:
                 print(f'{future_response[future]} generated an exception: {exc}')
-            
-            # try:
-            #     data = future.result()
-            # except Exception as exc:
-            #     print('%r generated an exception: %s' % (url, exc))
-            # else:
-            #     print('%r page is %d bytes' % (url, len(data)))
 
-    entry.year, entry.entry = zip(*sorted(zip(entry.year, entry.entry)))
+    entry._sort()
 
     fig.add_trace(
         go.Scatter(
