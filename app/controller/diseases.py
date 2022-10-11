@@ -6,6 +6,8 @@ from app.controller.enum import EUtilityField, EQueryField, ESearchField
 from app.controller.database import EntrezDatabases
 from xml.etree.ElementTree import ParseError
 
+class XmlParsingException(Exception):
+    pass
 class Diseases(EntrezDatabases):
     
     def __init__(self) -> None:
@@ -15,7 +17,10 @@ class Diseases(EntrezDatabases):
 
     def parse_xml(self, xml_string:str):
         try:
-            xml_root = ET.fromstring(xml_string, parser=self._parser)
+            # xml_root = ET.fromstring(xml_string, parser=self._parser)
+            if '"error":"API rate limit exceeded"' in xml_string:
+                raise XmlParsingException("rate limit exceeded")
+            xml_root = ET.fromstring(xml_string)
         except ParseError:
             xml_root = ET.fromstring(xml_string)
         return xml_root
